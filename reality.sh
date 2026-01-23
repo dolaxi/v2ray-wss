@@ -502,6 +502,23 @@ cat > "$temp_config" <<EOF
     "log": {
         "loglevel": "warning"
     },
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "ip": [
+                    "geoip:cn"
+                ],
+                "outboundTag": "block"
+            },
+            {
+                "domain": [
+                    "geosite:cn"
+                ],
+                "outboundTag": "block"
+            }
+        ]
+    },
     "inbounds": [
         {
             "port": $PORT_NUMBER,
@@ -516,24 +533,29 @@ cat > "$temp_config" <<EOF
                 "decryption": "none"
             },
             "streamSettings": {
-                "network": "tcp",
+                "network": "raw",
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "$SERVER_SNI:443",
+                    "target": "$SERVER_SNI:443",
                     "xver": 0,
                     "serverNames": [
                         "$SERVER_SNI"
                     ],
                     "privateKey": "$RE_PRIVATE_KEY",
-                    "minClientVer": "",
-                    "maxClientVer": "",
-                    "maxTimeDiff": 0,
                     "shortIds": [
                         "88"
                     ]
                 }
-            }
+            },
+            "sniffing": {
+              "enabled": true,
+              "destOverride": [
+                  "http",
+                  "tls",
+                  "quic"
+              ]
+          }
         }
     ],
     "outbounds": [
