@@ -561,7 +561,8 @@ cat > "$temp_config" <<EOF
     "outbounds": [
         {
             "protocol": "freedom",
-            "tag": "direct"
+            "tag": "direct",
+            "targetStrategy": "UseIPv4v6"
         },
         {
             "protocol": "blackhole",
