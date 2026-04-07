@@ -502,6 +502,12 @@ cat > "$temp_config" <<EOF
     "log": {
         "loglevel": "warning"
     },
+    "dns": {
+        "servers": [
+            "1.1.1.1",
+            "1.0.0.1"
+        ]
+    },    
     "routing": {
         "domainStrategy": "IPIfNonMatch",
         "rules": [
