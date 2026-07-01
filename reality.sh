@@ -512,14 +512,9 @@ cat > "$temp_config" <<EOF
         "domainStrategy": "IPIfNonMatch",
         "rules": [
             {
+                "type": "field",
                 "ip": [
                     "geoip:cn"
-                ],
-                "outboundTag": "block"
-            },
-            {
-                "domain": [
-                    "geosite:cn"
                 ],
                 "outboundTag": "block"
             }
@@ -572,7 +567,7 @@ cat > "$temp_config" <<EOF
         },
         {
             "protocol": "blackhole",
-            "tag": "blocked"
+            "tag": "block"
         }
     ]    
 }
