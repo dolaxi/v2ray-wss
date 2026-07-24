@@ -310,16 +310,17 @@ install_xray() {
     
     case $PKG_MANAGER in
         "apt")
-            basic_packages="curl wget gawk ca-certificates gnupg lsb-release unzip"
+            basic_packages="curl wget gawk ca-certificates"
+            PKG_INSTALL="apt-get install -o DPkg::Lock::Timeout=300 -y" 
             ;;
         "yum"|"dnf")
-            basic_packages="curl wget gawk ca-certificates gnupg2 unzip"
+            basic_packages="curl wget gawk ca-certificates"
             ;;
         "zypper")
-            basic_packages="curl wget gawk ca-certificates gnupg2 unzip"
+            basic_packages="curl wget gawk ca-certificates"
             ;;
         "pacman")
-            basic_packages="curl wget gawk ca-certificates gnupg unzip"
+            basic_packages="curl wget gawk ca-certificates"
             ;;
     esac
     
@@ -713,6 +714,18 @@ display_client_config() {
     fi
 }
 
+display_client_config2() {
+    echo
+    display_green "安装已经完成"
+    echo
+    cat /usr/local/etc/xray/reclient.json
+    echo
+    display_green "配置信息已保存到: /usr/local/etc/xray/reclient.json"
+    if [[ -n "$LOG_FILE" ]]; then
+        display_green "安装日志文件位置: $LOG_FILE"
+    fi
+}
+
 # 获取用户输入
 get_user_input() {
     log_info "获取用户配置参数..."
@@ -721,21 +734,9 @@ get_user_input() {
     UUID=$(generate_uuid)
     log_info "已生成UUID: $UUID"
     
-    # 获取端口号
-    local port_input
-    read -r -t 15 -p "回车或等待15秒为默认端口443，或者自定义端口请输入(1-65535)："  port_input
-    if [[ -z "$port_input" ]]; then
-        PORT_NUMBER=443
-        echo ""
-    else
-        if ! validate_port "$port_input"; then
-            PORT_NUMBER=443
-            print_yellow "端口号无效，使用默认端口443"
-        else
-            PORT_NUMBER="$port_input"
-        fi
-    fi
-    log_info "使用端口: $PORT_NUMBER"
+    # 直接使用默认端口443，不等待用户输入
+    PORT_NUMBER=443
+    log_info "使用默认端口: $PORT_NUMBER"
     
     echo
     
@@ -784,7 +785,7 @@ main() {
     configure_xray
     
     # 显示配置 - 使用无日志输出版本
-    display_client_config
+    display_client_config2
     
     # 显示服务状态
     display_xray_status
