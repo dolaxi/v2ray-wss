@@ -714,17 +714,6 @@ display_client_config() {
     fi
 }
 
-display_client_config2() {
-    echo
-    display_green "安装已经完成"
-    echo
-    cat /usr/local/etc/xray/reclient.json
-    echo
-    display_green "配置信息已保存到: /usr/local/etc/xray/reclient.json"
-    if [[ -n "$LOG_FILE" ]]; then
-        display_green "安装日志文件位置: $LOG_FILE"
-    fi
-}
 
 # 获取用户输入
 get_user_input() {
@@ -785,7 +774,7 @@ main() {
     configure_xray
     
     # 显示配置 - 使用无日志输出版本
-    display_client_config2
+    display_client_config
     
     # 显示服务状态
     display_xray_status
